@@ -6,3 +6,4 @@ edition = "2021"
 [dependencies]
 tokio = { version = "1.40", features = ["full"] }
 reqwest = "0.12"
+reqwest-eventsource = "0.6"
