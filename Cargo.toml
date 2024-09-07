@@ -2,6 +2,9 @@
 name = "merklemap-cli"
 version = "0.1.0"
 edition = "2021"
+license = "MIT"
+description = "A CLI client for the merklemap.com API"
+repository = "https://github.com/barre/merklemap-cli"
 
 [dependencies]
 tokio = { version = "1.40", features = ["full"] }
