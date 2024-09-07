@@ -1,3 +1,8 @@
+//! MerkleMap CLI
+//!
+//! This module provides the command-line interface for interacting with the [merklemap](https://www.merklemap.com/) API.
+//! It allows users to search for subdomains and tail live subdomain discoveries.
+
 use clap::{Parser, Subcommand};
 use merklemap_cli::{search, tail};
 

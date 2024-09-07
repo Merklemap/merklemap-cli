@@ -1,3 +1,8 @@
+//! MerkleMap CLI Library
+//!
+//! This library provides the core functionality for interacting with the [merklemap](https://www.merklemap.com/) API.
+//! It includes functions for searching subdomains and tailing live subdomain discoveries.
+
 use anyhow::Result;
 use chrono::{DateTime, TimeZone, Utc};
 use futures::StreamExt;
