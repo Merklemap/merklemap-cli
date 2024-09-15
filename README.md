@@ -17,7 +17,7 @@ installed, you can get them from [rustup.rs](https://rustup.rs/).
 Once you have Rust and Cargo installed, you can build and install the CLI by running:
 
 ```
-cargo install --path .
+cargo install merklemap-cli
 ```
 
 This will compile the project and install the binary in your Cargo bin directory.
