@@ -80,7 +80,7 @@ where
         }
     }
 
-    pb.finish_with_message("Done");
+    pb.finish_and_clear();
     Ok(())
 }
 
