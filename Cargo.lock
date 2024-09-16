@@ -214,6 +214,19 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d3fd119d74b830634cea2a0f58bbd0d54540518a14397557951e79340abc28c0"
 
 [[package]]
+name = "console"
+version = "0.15.8"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0e1f83fc076bd6dd27517eacdf25fef6c4dfe5f1d7448bafaaf3a26f13b5e4eb"
+dependencies = [
+ "encode_unicode",
+ "lazy_static",
+ "libc",
+ "unicode-width",
+ "windows-sys 0.52.0",
+]
+
+[[package]]
 name = "core-foundation"
 version = "0.9.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -228,6 +241,12 @@ name = "core-foundation-sys"
 version = "0.8.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "773648b94d0e5d620f64f280777445740e61fe701025087ec8b57f45c791888b"
+
+[[package]]
+name = "encode_unicode"
+version = "0.3.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a357d28ed41a50f9c765dbfe56cbc04a64e53e5fc58ba79fbc34c10ef3df831f"
 
 [[package]]
 name = "encoding_rs"
@@ -607,6 +626,28 @@ dependencies = [
 ]
 
 [[package]]
+name = "indicatif"
+version = "0.17.8"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "763a5a8f45087d6bcea4222e7b72c291a054edf80e4ef6efd2a4979878c7bea3"
+dependencies = [
+ "console",
+ "instant",
+ "number_prefix",
+ "portable-atomic",
+ "unicode-width",
+]
+
+[[package]]
+name = "instant"
+version = "0.1.13"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e0242819d153cba4b4b05a5a8f2a7e9bbf97b6055b2a002b395c96b5ff3c0222"
+dependencies = [
+ "cfg-if",
+]
+
+[[package]]
 name = "ipnet"
 version = "2.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -632,6 +673,12 @@ checksum = "1868808506b929d7b0cfa8f75951347aa71bb21144b7791bae35d9bccfcfe37a"
 dependencies = [
  "wasm-bindgen",
 ]
+
+[[package]]
+name = "lazy_static"
+version = "1.5.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "bbd2bcb4c963f2ddae06a2efc7e9f3591312473c50c6685e1f298068316e66fe"
 
 [[package]]
 name = "libc"
@@ -669,12 +716,13 @@ checksum = "78ca9ab1a0babb1e7d5695e3530886289c18cf2f87ec19a575a0abdce112e3a3"
 
 [[package]]
 name = "merklemap-cli"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "anyhow",
  "chrono",
  "clap",
  "futures",
+ "indicatif",
  "reqwest",
  "reqwest-eventsource",
  "serde",
@@ -750,6 +798,12 @@ checksum = "071dfc062690e90b734c0b2273ce72ad0ffa95f0c74596bc250dcfd960262841"
 dependencies = [
  "autocfg",
 ]
+
+[[package]]
+name = "number_prefix"
+version = "0.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "830b246a0e5f20af87141b25c173cd1b609bd7779a4617d6ec582abaf90870f3"
 
 [[package]]
 name = "object"
@@ -876,6 +930,12 @@ name = "pkg-config"
 version = "0.3.30"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d231b230927b5e4ad203db57bbcbee2802f6bce620b1e4a9024a07d94e2907ec"
+
+[[package]]
+name = "portable-atomic"
+version = "1.7.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "da544ee218f0d287a911e9c99a39a8c9bc8fcad3cb8db5959940044ecfc67265"
 
 [[package]]
 name = "proc-macro2"
@@ -1409,6 +1469,12 @@ checksum = "a56d1686db2308d901306f92a263857ef59ea39678a5458e7cb17f01415101f5"
 dependencies = [
  "tinyvec",
 ]
+
+[[package]]
+name = "unicode-width"
+version = "0.1.13"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0336d538f7abc86d282a4189614dfaa90810dfc2c6f6427eaf88e16311dd225d"
 
 [[package]]
 name = "untrusted"

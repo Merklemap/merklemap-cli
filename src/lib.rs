@@ -1,11 +1,7 @@
-//! MerkleMap CLI Library
-//!
-//! This library provides the core functionality for interacting with the [merklemap](https://www.merklemap.com/) API.
-//! It includes functions for searching subdomains and tailing live subdomain discoveries.
-
 use anyhow::Result;
 use chrono::{DateTime, TimeZone, Utc};
 use futures::StreamExt;
+use indicatif::{ProgressBar, ProgressStyle};
 use reqwest_eventsource::{Error as EventSourceError, Event, EventSource};
 use serde::Deserialize;
 
@@ -19,6 +15,11 @@ struct Entry {
 #[derive(Debug, Deserialize)]
 struct TailEntry {
     hostname: String,
+}
+
+#[derive(Debug, Deserialize)]
+struct ProgressEvent {
+    progress_percentage: f64,
 }
 
 trait Printable {
@@ -59,12 +60,19 @@ where
     T: for<'de> Deserialize<'de> + Printable,
 {
     let mut es = EventSource::get(url);
+    let pb = ProgressBar::new(100);
+    pb.set_style(ProgressStyle::default_bar()
+        .template("{spinner:.green} [{elapsed_precise}] [{bar:40.cyan/blue}] {percent}% ({eta})")?
+        .progress_chars("#>-"));
 
     while let Some(event) = es.next().await {
         match event {
             Ok(Event::Message(message)) => {
-                let entry = serde_json::from_str::<T>(&message.data)?;
-                entry.print();
+                if let Ok(progress) = serde_json::from_str::<ProgressEvent>(&message.data) {
+                    pb.set_position(progress.progress_percentage as u64);
+                } else if let Ok(entry) = serde_json::from_str::<T>(&message.data) {
+                    entry.print();
+                }
             }
             Ok(Event::Open) => {}
             Err(EventSourceError::StreamEnded) => break,
@@ -72,6 +80,7 @@ where
         }
     }
 
+    pb.finish_with_message("Done");
     Ok(())
 }
 
@@ -80,7 +89,7 @@ fn format_timestamp(timestamp: DateTime<Utc>) -> String {
 }
 
 pub async fn search(query: &str) -> Result<()> {
-    let url = format!("https://api.merklemap.com/search?query={}&stream=true", query);
+    let url = format!("https://api.merklemap.com/search?query={}&stream=true&stream_progress=true", query);
     process_event_stream::<Entry>(&url).await
 }
 
