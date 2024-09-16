@@ -4,6 +4,8 @@ A command-line interface (CLI) client for the [merklemap](https://www.merklemap.
 search / enumerate subdomains
 matching a given query and tail live subdomain discoveries from the Merklemap ingestion pipeline.
 
+<a href="https://asciinema.org/a/dr4PwFmf9t1anDV3vWwFXFZJ5" target="_blank"><img src="https://asciinema.org/a/dr4PwFmf9t1anDV3vWwFXFZJ5.svg" /></a>
+
 ## Features
 
 - Search for subdomains matching a specific query
