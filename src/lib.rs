@@ -59,7 +59,10 @@ async fn process_event_stream<T>(url: &str) -> Result<()>
 where
     T: for<'de> Deserialize<'de> + Printable,
 {
-    let mut es = EventSource::get(url);
+    let request = reqwest::Client::new().get(url).header("User-Agent", "merklemap-cli/rs");
+
+    let mut es = EventSource::new(request)?;
+
     let pb = ProgressBar::new(100);
     pb.set_style(ProgressStyle::default_bar()
         .template("{spinner:.green} [{elapsed_precise}] [{bar:40.cyan/blue}] {percent}% ({eta})")?
