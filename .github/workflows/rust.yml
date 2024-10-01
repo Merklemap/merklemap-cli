@@ -1,21 +1,55 @@
-name: Rust
+name: Rust Build and Release
 
 on:
   push:
     branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
+
 
 env:
   CARGO_TERM_COLOR: always
 
 jobs:
   build:
-
-    runs-on: ubuntu-latest
+    name: Build on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, windows-latest, macos-latest ]
+        include:
+          - os: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+          - os: windows-latest
+            target: x86_64-pc-windows-msvc
+          - os: macos-latest
+            target: x86_64-apple-darwin
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Build
-      run: cargo build --release --verbose
-      
+      - uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          target: ${{ matrix.target }}
+          override: true
+
+      - name: Build
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --release --target ${{ matrix.target }}
+
+      - name: Package Binary
+        shell: bash
+        run: |
+          binary_name="merklemap-cli"
+          if [ "${{ matrix.os }}" = "windows-latest" ]; then
+            binary_name="${binary_name}.exe"
+          fi
+          tar -czf "${binary_name}-${{ matrix.target }}.tar.gz" -C "target/${{ matrix.target }}/release" "${binary_name}"
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: merklemap-cli-${{ matrix.target }}
+          path: merklemap-cli-${{ matrix.target }}.tar.gz
