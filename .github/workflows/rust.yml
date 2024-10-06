@@ -2,8 +2,7 @@ name: Rust Build and Release
 
 on:
   push:
-    branches: [ "master" ]
-
+    branches: ["master"]
 
 env:
   CARGO_TERM_COLOR: always
@@ -14,7 +13,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ ubuntu-latest, windows-latest, macos-latest ]
+        os: [ubuntu-latest, windows-latest, macos-latest]
         include:
           - os: ubuntu-latest
             target: x86_64-unknown-linux-gnu
@@ -39,17 +38,30 @@ jobs:
           command: build
           args: --release --target ${{ matrix.target }}
 
+      - name: Set binary name
+        shell: bash
+        run: |
+          BINARY_NAME="merklemap-cli"
+          if [ "${{ matrix.os }}" = "windows-latest" ]; then
+            BINARY_NAME="${BINARY_NAME}.exe"
+          fi
+          echo "BINARY_NAME=${BINARY_NAME}" >> $GITHUB_ENV
+
       - name: Package Binary
         shell: bash
         run: |
-          binary_name="merklemap-cli"
-          if [ "${{ matrix.os }}" = "windows-latest" ]; then
-            binary_name="${binary_name}.exe"
+          echo "Packaging binary from: target/${{ matrix.target }}/release/${BINARY_NAME}"
+          if [ -f "target/${{ matrix.target }}/release/${BINARY_NAME}" ]; then
+            echo "Binary file exists"
+            tar -czvf "${BINARY_NAME}-${{ matrix.target }}.tar.gz" -C "target/${{ matrix.target }}/release" "${BINARY_NAME}"
+            echo "Packaging complete"
+          else
+            echo "Error: Binary file not found"
+            exit 1
           fi
-          tar -czf "${binary_name}-${{ matrix.target }}.tar.gz" -C "target/${{ matrix.target }}/release" "${binary_name}"
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: merklemap-cli-${{ matrix.target }}
-          path: merklemap-cli-${{ matrix.target }}.tar.gz
+          name: ${{ env.BINARY_NAME }}-${{ matrix.target }}
+          path: ${{ env.BINARY_NAME }}-${{ matrix.target }}.tar.gz
